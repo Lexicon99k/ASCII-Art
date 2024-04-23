@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light only">
+  <meta name="theme-color" content="#c7ecee">
+  <link rel="shortcut icon" href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABqklEQVQ4jZ2Tv0scURDHP7P7SGWh14mkuXJZEH8cgqUWcklAsLBbCEEJSprkD7hD/4BUISHEkMBBiivs5LhCwRQBuWgQji2vT7NeYeF7GxwLd7nl4knMwMDMfL8z876P94TMLt+8D0U0EggQSsAjwMvga8ChJAqxqjTG3m53AQTg4tXHDRH9ABj+zf6oytbEu5d78nvzcyiivx7QXBwy46XOi5z1jbM+Be+nqVfP8yzuD3FM6rzIs9YE1hqGvDf15cVunmdx7w5eYJw1pcGptC9CD4gBUuef5Ujq/BhAlTLIeFYuyfmTZgeYv+2nPt1a371P+Hm1WUPYydKf0lnePwVmh3hnlcO1uc7yvgJUDtdG8oy98kduK2KjeHI0fzCQINSXOk/vlXBUOaihAwnGWd8V5r1uhe1VIK52V6JW2D4FqHZX5lphuwEE7ooyaN7gjLMmKSwYL+pMnV+MA/6+g8RYa2Lg2RBQbj4+rll7uymLy3coiuXb5PdQVf7rKYvojAB8Lf3YUJUHfSYR3XqeLO5JXvk0dhKqSqQQoCO+s5AIxCLa2Lxc6ALcAPwS26XFskWbAAAAAElFTkSuQmCC" />
+   
+  <title>ASCII text Art Generator</title>
+  <meta name="description" content="Simple and Effective tool to Generate ASCII Text Art."/>
+
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css" integrity="sha512-HqxHUkJM0SYcbvxUw5P60SzdOTy/QVwA1JJrvaXJv4q7lmbDZCmZaqz01UPOaQveoxfYRv1tHozWGPMcuTBuvQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <section class="section">
+        <div class="container card">
+            <h1 class="title">ASCII Art Generator</h1>
+            <div class="field">
+            <div class="control">
+            <div class="select">
+            <select id="artType" onchange="toggleFontSelect()">
+                <option value="figlet" class="label">ASCII Text Art</option>
+                <option value="cowsay" class="label">Cowsay ASCII Art</option>
+            </select>        
+            </div>    
+            </div>
+            </div>
+            <div class="field">
+                <label class="label">Enter Text:</label>
+                <div class="control">
+                    <input class="input" type="text" id="textInput" placeholder="Enter text...">
+                </div>
+            </div>
+            <div class="field" id="fontField">
+                <label class="label">Select Font:</label>
+                <div class="control">
+                    <div class="select">
+                        <select id="fontSelect">
+                            <option value="Standard">Standard</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-link" onclick="generateASCII()">Generate</button>
+                </div>
+            </div>
+                <div class="field">
+                    <div id="asciiOutput"></div>
+                </div>
+        </div>
+    </section>
+
+<div id="notificationModal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+        <div class="box">
+            <p id="notificationMessage"></p>
+            <button class="button is-primary" onclick="closeNotificationModal()">OK</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/figlet"></script>
+<script src="script.js"></script>
+
+<script>
+function toggleFontSelect() {
+    const artType = document.getElementById("artType").value;
+    const fontField = document.getElementById("fontField");
+
+    if (artType === "figlet") {
+        fontField.style.display = "block";
+    } else {
+        fontField.style.display = "none";
+    }
+}
+</script>
+
+</body>
+</html>
