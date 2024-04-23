@@ -18,7 +18,7 @@ window.onclick = function(event) {
 
 async function fetchFontNames() {
     try {
-        const response = await fetch('https://api.github.com/repos/patorjk/figlet.js/contents/fonts');
+        const response = await fetch('https://api.github.com/repos/mskian/ascii-art/contents/fonts');
         if (!response.ok) {
             throw new Error('Failed to fetch fonts');
         }
