@@ -182,14 +182,11 @@ function saveAsSVG(asciiText, originalText) {
       .ascii-text {
         font-family: 'Courier New', monospace;
         font-size: ${fontSize}px;
-        fill: #fdcb6e;
+        fill: #00ff41;
         white-space: pre;
       }
     </style>
   </defs>
-  
-  <!-- Background -->
-  <rect width="100%" height="100%" fill="#2c001e"/>
   
   <!-- ASCII Art Text -->
   <g class="ascii-text">
