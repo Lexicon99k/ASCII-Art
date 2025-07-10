@@ -33,10 +33,10 @@
   pre {
     font-family: monospace;
     font-size: 14px;
-    color: #fdcb6e;
-    text-shadow: 0 0 3px #fdcb6e;
+    color: #4ADE80;
+    text-shadow: None;
     line-height: 1.5em;
-    background:  #2c001e;
+    background:  #000000;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased !important;
     -moz-font-smoothing: antialiased !important;
