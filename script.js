@@ -88,9 +88,15 @@ function generateASCII() {
 
             const copyButton = document.createElement('button');
             copyButton.innerHTML = '<span class="button-text">Copy</span>';
-            copyButton.className = 'button is-info';
+            copyButton.className = 'button is-info mr-2';
             copyButton.onclick = copyToClipboard;
             buttonContainer.appendChild(copyButton);
+
+            const saveButton = document.createElement('button');
+            saveButton.innerHTML = '<span class="button-text">Save as SVG</span>';
+            saveButton.className = 'button is-success';
+            saveButton.onclick = () => saveAsSVG(figletData, inputText);
+            buttonContainer.appendChild(saveButton);
         });
     } else if (artType === 'cowsay') {
         const cowsayData = `
@@ -121,9 +127,15 @@ function generateASCII() {
 
         const copyButton = document.createElement('button');
         copyButton.innerHTML = '<span class="button-text">Copy</span>';
-        copyButton.className = 'button is-info';
+        copyButton.className = 'button is-info mr-2';
         copyButton.onclick = copyToClipboard;
         buttonContainer.appendChild(copyButton);
+
+        const saveButton = document.createElement('button');
+        saveButton.innerHTML = '<span class="button-text">Save as SVG</span>';
+        saveButton.className = 'button is-success';
+        saveButton.onclick = () => saveAsSVG(cowsayData, inputText);
+        buttonContainer.appendChild(saveButton);
     }
 }
 
@@ -138,7 +150,7 @@ populateFontDropdown();
 
 async function copyToClipboard() {
     const asciiOutput = document.getElementById("asciiOutput");
-    const asciiText = asciiOutput.innerText.replace(/Clear|Copy/g, '');
+    const asciiText = asciiOutput.innerText.replace(/Clear|Copy|Save as SVG/g, '');
 
     try {
         await navigator.clipboard.writeText(asciiText);
@@ -147,4 +159,71 @@ async function copyToClipboard() {
         console.error('Error copying to clipboard:', error);
         showNotificationModal('Failed to copy ASCII art to clipboard');
     }
+}
+
+function saveAsSVG(asciiText, originalText) {
+    // Clean the ASCII text and split into lines
+    const lines = asciiText.trim().split('\n');
+    const fontSize = 14;
+    const lineHeight = fontSize * 1.2;
+    const padding = 20;
+    
+    // Calculate dimensions
+    const maxLineLength = Math.max(...lines.map(line => line.length));
+    const charWidth = fontSize * 0.6; // Approximate character width for monospace
+    const width = maxLineLength * charWidth + (padding * 2);
+    const height = lines.length * lineHeight + (padding * 2);
+    
+    // Create SVG content
+    const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+  <defs>
+    <style>
+      .ascii-text {
+        font-family: 'Courier New', monospace;
+        font-size: ${fontSize}px;
+        fill: #fdcb6e;
+        white-space: pre;
+      }
+    </style>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#2c001e"/>
+  
+  <!-- ASCII Art Text -->
+  <g class="ascii-text">
+    ${lines.map((line, index) => 
+      `<text x="${padding}" y="${padding + (index + 1) * lineHeight}" xml:space="preserve">${escapeXml(line)}</text>`
+    ).join('\n    ')}
+  </g>
+  
+  <!-- Metadata -->
+  <metadata>
+    <title>ASCII Art: ${escapeXml(originalText)}</title>
+    <description>Generated ASCII art from text: ${escapeXml(originalText)}</description>
+  </metadata>
+</svg>`;
+
+    // Create and download the file
+    const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `ascii-art-${originalText.replace(/[^a-zA-Z0-9]/g, '-')}.svg`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    showNotificationModal('ASCII art saved as SVG!');
+}
+
+function escapeXml(text) {
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
