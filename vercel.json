@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "ascii-art-generator",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
@@ -22,7 +21,7 @@
       ]
     },
     {
-      "source": "/fonts/(.*)",
+      "source": "/fonts/.*",
       "headers": [
         {
           "key": "Cache-Control",
@@ -31,7 +30,7 @@
       ]
     },
     {
-      "source": "/(.*\\.(css|js))",
+      "source": "/.*\\.(css|js)$",
       "headers": [
         {
           "key": "Cache-Control",

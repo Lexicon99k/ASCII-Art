@@ -1,35 +1,12 @@
 {
   "name": "ascii-art-gen",
   "version": "1.0.0",
-  "description": "A simple and effective tool to generate ASCII Text Art with SVG export",
-  "main": "index.html",
+  "description": "ASCII Text Art Generator",
   "scripts": {
-    "dev": "npx serve .",
-    "build": "echo 'No build step needed for static site'",
-    "start": "npx serve .",
-    "preview": "npx serve ."
+    "start": "npx serve ."
   },
-  "keywords": [
-    "ascii",
-    "art",
-    "text",
-    "generator",
-    "figlet",
-    "cowsay",
-    "matrix",
-    "svg",
-    "export"
-  ],
   "author": "Lexicon99k",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Lexicon99k/ASCII-Art.git"
-  },
-  "homepage": "https://ascii-art-gen.vercel.app",
-  "engines": {
-    "node": ">=14.0.0"
-  },
   "devDependencies": {
     "serve": "^14.2.0"
   }
