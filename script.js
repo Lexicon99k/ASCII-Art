@@ -41,6 +41,29 @@ async function populateFontDropdown() {
     });
 }
 
+function applyLolcatColors(text) {
+    const lines = text.split('\n');
+    let coloredHtml = '';
+    
+    lines.forEach((line, lineIndex) => {
+        let coloredLine = '';
+        for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            if (char !== ' ') {
+                // Calculate rainbow color based on position
+                const hue = ((lineIndex * 10 + i * 3) % 360);
+                const color = `hsl(${hue}, 100%, 60%)`;
+                coloredLine += `<span style="color: ${color};">${char}</span>`;
+            } else {
+                coloredLine += char;
+            }
+        }
+        coloredHtml += coloredLine + '\n';
+    });
+    
+    return coloredHtml;
+}
+
 function generateASCII() {
     const inputText = document.getElementById("textInput").value.trim();
     const inputLength = inputText.length;
@@ -69,11 +92,12 @@ function generateASCII() {
             }
 
             if (figletData.trim()) {
+                const coloredAscii = applyLolcatColors(figletData);
                 asciiOutput.innerHTML = `<section class="section"><div class="container content"><div class="columns is-centered"><div class="column is-full"><section id="terminal__bar">
             <div class="fakeButtons fakeClose"></div>
             <div class="fakeButtons fakeMinimize"></div>
             <div class="fakeButtons fakeZoom"></div>
-            </section><pre>${figletData}</pre>`;
+            </section><pre>${coloredAscii}</pre>`;
             }
 
             const buttonContainer = document.createElement('div');
@@ -109,11 +133,12 @@ function generateASCII() {
                  ||----w |
                  ||     ||
 `;
+        const coloredAscii = applyLolcatColors(cowsayData);
         asciiOutput.innerHTML += `<section class="section"><div class="container content"><div class="columns is-centered"><div class="column is-full"><section id="terminal__bar">
         <div class="fakeButtons fakeClose"></div>
         <div class="fakeButtons fakeMinimize"></div>
         <div class="fakeButtons fakeZoom"></div>
-        </section><pre>${cowsayData}</pre>`;
+        </section><pre>${coloredAscii}</pre>`;
 
         const buttonContainer = document.createElement('div');
         buttonContainer.className = 'has-text-centered';
@@ -174,7 +199,24 @@ function saveAsSVG(asciiText, originalText) {
     const width = maxLineLength * charWidth + (padding * 2);
     const height = lines.length * lineHeight + (padding * 2);
     
-    // Create SVG content
+    // Create SVG content with lolcat colors
+    let svgTextContent = '';
+    lines.forEach((line, lineIndex) => {
+        let lineContent = '';
+        for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            if (char !== ' ') {
+                // Calculate rainbow color based on position
+                const hue = ((lineIndex * 10 + i * 3) % 360);
+                const color = `hsl(${hue}, 100%, 60%)`;
+                lineContent += `<tspan fill="${color}">${escapeXml(char)}</tspan>`;
+            } else {
+                lineContent += char;
+            }
+        }
+        svgTextContent += `<text x="${padding}" y="${padding + (lineIndex + 1) * lineHeight}" xml:space="preserve">${lineContent}</text>\n    `;
+    });
+    
     const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
   <defs>
@@ -182,17 +224,17 @@ function saveAsSVG(asciiText, originalText) {
       .ascii-text {
         font-family: 'Courier New', monospace;
         font-size: ${fontSize}px;
-        fill: #00ff41;
         white-space: pre;
       }
     </style>
   </defs>
   
-  <!-- ASCII Art Text -->
+  <!-- Black background -->
+  <rect width="100%" height="100%" fill="#000000"/>
+  
+  <!-- ASCII Art Text with Rainbow Colors -->
   <g class="ascii-text">
-    ${lines.map((line, index) => 
-      `<text x="${padding}" y="${padding + (index + 1) * lineHeight}" xml:space="preserve">${escapeXml(line)}</text>`
-    ).join('\n    ')}
+    ${svgTextContent}
   </g>
   
   <!-- Metadata -->
@@ -207,13 +249,13 @@ function saveAsSVG(asciiText, originalText) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `ascii-art-${originalText.replace(/[^a-zA-Z0-9]/g, '-')}.svg`;
+    a.download = `ascii-art-lolcat-${originalText.replace(/[^a-zA-Z0-9]/g, '-')}.svg`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     
-    showNotificationModal('ASCII art saved as SVG!');
+    showNotificationModal('Rainbow ASCII art saved as SVG!');
 }
 
 function escapeXml(text) {
