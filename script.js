@@ -230,7 +230,7 @@ function saveAsSVG(asciiText, originalText) {
   </defs>
   
   <!-- Black background -->
-  <rect width="100%" height="100%" fill="#000000"/>
+  <rect width="100%" height="100%" fill="none"/>
   
   <!-- ASCII Art Text with Rainbow Colors -->
   <g class="ascii-text">
